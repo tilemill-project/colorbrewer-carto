@@ -1,4 +1,4 @@
-This is [colorbrewer](http://colorbrewer2.org/) colors for the Carto it's useful
+This is [colorbrewer](http://colorbrewer2.org/) colors for the Carto. Useful
 if you're doing choropleths and want cool, well thought-through colors,
 or are colorblind, or you're just a art-deficient developer like myself.
 
