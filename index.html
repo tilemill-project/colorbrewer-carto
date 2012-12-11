@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>colorbrewer-carto</title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <script src='less-1.3.1.min.js'></script>
+        <script src='jquery-1.8.3.min.js'></script>
+        <link rel="stylesheet/less" type="text/css" href="colors/colorbrewer.mss">
+        <style>
+            body {
+                font:normal 11px/12px 'Helvetica Neue';
+                margin:0;
+            }
+            h1 {
+                padding:5px 20px;
+            }
+            div.block {
+                width:10%;
+                height:100px;
+                display:inline-block;
+                margin:0;
+            }
+            div.block span, div.block a {
+                padding:5px;
+                display:inline-block;
+                background:#fff;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>colorbrewer-carto
+            <a href='colors/colorbrewer.mss'>(all)</a>
+            <a href='http://colorbrewer2.org/'>(by cynthia brewer)</a>
+            <a href='https://github.com/mapbox/colorbrewer-carto'>(source)</a>
+        </h1>
+        <div id='colors'></div>
+        <script>
+            var subsets = ['Blues',
+                'BrBG',
+                'Greens',
+                'Greys',
+                'Oranges',
+                'PiYG',
+                'PRGn',
+                'PuBu',
+                'PuOr',
+                'PuRd',
+                'Purples',
+                'RdBu',
+                'RdGy',
+                'RdYlBu',
+                'RdYlGn',
+                'Reds',
+                'Spectral',
+                'YlGn',
+                'YlGnBu'];
+            $colors = $('#colors');
+            function group(x) {
+                return x.split('-')[0].replace('@', '');
+            }
+            $.ajax({
+                url: 'colors/colorbrewer.mss',
+                success: function(sheet) {
+                    var p = new less.Parser();
+                    p.parse(sheet, function(err, tree) {
+                        var colors = [], g = '';
+                        for (var i = 0; i < tree.rules.length; i++) {
+                            if (tree.rules[i] instanceof less.tree.Rule) {
+                                var c = {
+                                    name: tree.rules[i].name,
+                                    color: tree.rules[i].value.toCSS({}),
+                                };
+                                if (group(c.name) !== g) {
+                                    $('<br />').appendTo($colors)
+                                    g = group(c.name);
+                                }
+                                if (subsets.indexOf(group(c.name)) !== -1) {
+                                    $('<div></div>').appendTo($colors)
+                                        .addClass('block')
+                                        .css('background', c.color)
+                                        .append($('<a></a>')
+                                            .attr('href', 'colors/' + group(c.name) + '.mss')
+                                            .text(c.name));
+                                } else {
+                                    $('<div></div>').appendTo($colors)
+                                        .addClass('block')
+                                        .css('background', c.color)
+                                        .append($('<span></span>')
+                                            .text(c.name));
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
