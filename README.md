@@ -7,4 +7,3 @@ This is a simple port from [the d3 project](https://github.com/mbostock/d3)'s
 
 Colorbrewer is created by Cynthia Brewer and licensed under an Apache License 2.0.
 See the `LICENSE` file for details.
-
